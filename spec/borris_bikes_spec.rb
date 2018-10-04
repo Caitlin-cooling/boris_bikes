@@ -22,9 +22,9 @@ require 'borris_bikes'
       bike = Bike.new
       expect(subject.dock(bike)).to eq "Bike docked"
     end
-    it 'raises an error if there is more than one bike docked' do
+    it 'raises an error if there is more than 20 bikes docked' do
       bike = Bike.new
-      subject.dock(bike)
+      20.times { subject.dock(bike) }
       expect { subject.dock(bike) }.to raise_error "Station full"
     end
   end

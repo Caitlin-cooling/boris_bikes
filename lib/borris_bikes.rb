@@ -10,10 +10,11 @@ class DockingStation
       raise "Oops, there are no bikes here"
     else
       @station[0]
+      @station.pop
     end
   end
   def dock(bike)
-    if @station.empty?
+    if @station.count < 20
        @station.push(bike)
       "Bike docked"
     else
