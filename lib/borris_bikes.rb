@@ -11,8 +11,9 @@ class DockingStation
   def release_bike
     bike = Bike.new
     fail "Oops, there are no bikes here" if empty?
-    binding.pry
-    fail "This bike is broken" if bike.working?(false)
+    if bike.working? == false
+      raise "This bike is broken"
+    end
     @station[0]
     @station.pop
   end

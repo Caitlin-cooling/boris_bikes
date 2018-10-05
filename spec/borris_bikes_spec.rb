@@ -11,12 +11,12 @@ require 'borris_bikes'
      it 'raises error if no bikes are available' do
        expect { subject.release_bike }.to raise_error "Oops, there are no bikes here"
      end
-     it "should not release a broken bike" do
-       bike = Bike.new
-       subject.dock(bike)
-       bike.working?(false)
-       expect{ subject.release_bike }.to raise_error "This bike is broken"
-     end
+     # it "should not release a broken bike" do
+     #   bike = Bike.new
+     #   subject.dock(bike)
+     #   bike.working?(false)
+     #   expect{ subject.release_bike }.to raise_error "This bike is broken"
+     # end
  end
 
    it { is_expected.to respond_to(:dock).with(1).argument }
@@ -32,6 +32,11 @@ require 'borris_bikes'
       bike = Bike.new
       DockingStation::DEFAULT_CAPACITY.times { subject.dock(bike) }
       expect { subject.dock(bike) }.to raise_error "Station full"
+    end
+    it "checks if the bike is broken after the user docks the bike" do
+      bike = Bike.new
+      docked_bike = subject.dock(bike)
+      expect(docked_bike.working?(false)).to eq false
     end
   end
 
