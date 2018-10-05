@@ -4,12 +4,12 @@ describe Bike do
 
     it "should let me report my bike as broken" do
       bike = Bike.new
-      expect(bike.working?(false)).to eq(false)
+      expect(bike.report_as_broken).to eq(false)
     end
 
     it "should default to working bike" do
       bike = Bike.new
-      expect(bike.working?()).to eq(true)
+      expect(bike.working?).to eq(true)
     end
 
 end
