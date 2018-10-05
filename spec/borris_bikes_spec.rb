@@ -1,11 +1,12 @@
 require 'borris_bikes'
 require 'pry'
   describe DockingStation do
+  let(:bike) { double :bike }
   it { is_expected.to respond_to :release_bike }
 
   describe '#release_bike' do
     it 'releases a bike if one is avaiable' do
-      bike = Bike.new
+      allow(bike).to receive(:working?).and_return(true)
       subject.dock(bike)
       expect(subject.release_bike).to eq bike
      end
@@ -13,7 +14,8 @@ require 'pry'
        expect { subject.release_bike }.to raise_error "Oops, there are no bikes here"
      end
      it "should not release a broken bike" do
-       bike = Bike.new
+       allow(bike).to receive(:report_as_broken).and_return(false)
+       allow(bike).to receive(:working?).and_return(false)
        subject.dock(bike)
        bike.report_as_broken
        expect{ subject.release_bike }.to raise_error "This bike is broken"
@@ -26,19 +28,16 @@ require 'pry'
 
   describe '#dock' do
     it 'docks bike if station is not full' do
-      bike = Bike.new
-      expect(subject.dock(bike)).to eq bike
+      expect(subject.dock(bike)).to eq (bike)
     end
     it 'raises an error if there is more than default capacity bikes docked' do
-      bike = Bike.new
       DockingStation::DEFAULT_CAPACITY.times { subject.dock(bike) }
       expect { subject.dock(bike) }.to raise_error "Station full"
     end
     it "checks if the bike is broken after the user docks the bike" do
-      bike = Bike.new
-      docked_bike = subject.dock(bike)
-      docked_bike.report_as_broken
-      expect(docked_bike.working).to eq false
+      allow(bike).to receive(:report_as_broken).and_return(false)
+      bike.report_as_broken
+      expect(subject.dock(bike)).to eq bike
     end
   end
 
@@ -51,7 +50,6 @@ require 'pry'
       expect(subject.capacity).to eq DockingStation::DEFAULT_CAPACITY
     end
     it 'raises an error if there is more than capacity bikes docked' do
-      bike = Bike.new
       station = DockingStation.new(50)
       50.times { station.dock(bike) }
       expect { station.dock(bike) }.to raise_error "Station full"
