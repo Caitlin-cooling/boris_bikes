@@ -6,7 +6,7 @@ require 'pry'
 
   describe '#release_bike' do
     it 'releases a bike if one is avaiable' do
-      allow(bike).to receive(:working?).and_return(true)
+      bike = double(:bike, working?: true)
       subject.dock(bike)
       expect(subject.release_bike).to eq bike
      end
@@ -14,8 +14,7 @@ require 'pry'
        expect { subject.release_bike }.to raise_error "Oops, there are no bikes here"
      end
      it "should not release a broken bike" do
-       allow(bike).to receive(:report_as_broken).and_return(false)
-       allow(bike).to receive(:working?).and_return(false)
+       bike = double(:bike, report_as_broken: false, working?: false)
        subject.dock(bike)
        bike.report_as_broken
        expect{ subject.release_bike }.to raise_error "This bike is broken"
@@ -35,7 +34,7 @@ require 'pry'
       expect { subject.dock(bike) }.to raise_error "Station full"
     end
     it "checks if the bike is broken after the user docks the bike" do
-      allow(bike).to receive(:report_as_broken).and_return(false)
+      bike = double(:bike, report_as_broken: false)
       bike.report_as_broken
       expect(subject.dock(bike)).to eq bike
     end
